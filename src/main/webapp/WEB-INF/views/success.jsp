@@ -11,7 +11,7 @@
 	${success}
 	<br/>
 	<br/>
-	Go back to <a href="<c:url value='/list' />">List of All Students</a>
+	Go back to <a href="<c:url value='/list' />">List of All Providers</a>
 	
 </body>
 
