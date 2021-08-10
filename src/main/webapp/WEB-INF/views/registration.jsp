@@ -7,7 +7,7 @@
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<title>Student Registration Form</title>
+	<title>Provider Registration Form</title>
 
 <style>
 
@@ -22,7 +22,7 @@
 
 	<h2>Registration Form</h2>
  
-	<form:form method="POST" modelAttribute="student">
+	<form:form method="POST" modelAttribute="provider">
 		<form:input type="hidden" path="id" id="id"/>
 		<table>
 			<tr>
@@ -65,6 +65,6 @@
 	</form:form>
 	<br/>
 	<br/>
-	Go back to <a href="<c:url value='/list' />">List of All Students</a>
+	Go back to <a href="<c:url value='/list' />">List of All Providers</a>
 </body>
 </html>

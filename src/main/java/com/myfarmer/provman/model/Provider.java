@@ -15,8 +15,8 @@ import org.joda.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name="student")
-public class Student {
+@Table(name="provider")
+public class Provider {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -95,9 +95,9 @@ public class Student {
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof Student))
+		if (!(obj instanceof Provider))
 			return false;
-		Student other = (Student) obj;
+		Provider other = (Provider) obj;
 		if (id != other.id)
 			return false;
 		if (code == null) {
@@ -110,7 +110,7 @@ public class Student {
 
 	@Override
 	public String toString() {
-		return "Student [id=" + id + ", name=" + name + ", enteringDate="
+		return "Provider [id=" + id + ", name=" + name + ", enteringDate="
 				+ enteringDate + ", nationality=" + nationality + ", code=" + code + "]";
 	}
 	

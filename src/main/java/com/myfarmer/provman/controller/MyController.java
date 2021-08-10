@@ -15,106 +15,106 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.myfarmer.provman.model.Student;
-import com.myfarmer.provman.service.StudentService;
+import com.myfarmer.provman.model.Provider;
+import com.myfarmer.provman.service.ProviderService;
 
 @Controller
 @RequestMapping("/")
 public class MyController {
 
 	@Autowired
-	StudentService service;
+	ProviderService service;
 	
 	@Autowired
 	MessageSource messageSource;
 
 	/*
-	 * List all existing Students.
+	 * List all existing Providers.
 	 */
 	@RequestMapping(value = { "/", "/list" }, method = RequestMethod.GET)
-	public String listStudents(ModelMap model) {
+	public String listProviders(ModelMap model) {
 
-		List<Student> students = service.findAllStudents();
-		model.addAttribute("students", students);
-		return "allstudents";
+		List<Provider> providers = service.findAllProviders();
+		model.addAttribute("providers", providers);
+		return "allproviders";
 	}
 
 	/*
-	 * Add a new Student.
+	 * Add a new Provider.
 	 */
 	@RequestMapping(value = { "/new" }, method = RequestMethod.GET)
-	public String newStudent(ModelMap model) {
-		Student student = new Student();
-		model.addAttribute("student", student);
+	public String newProvider(ModelMap model) {
+		Provider provider = new Provider();
+		model.addAttribute("provider", provider);
 		model.addAttribute("edit", false);
 		return "registration";
 	}
 
 	/*
-	 * Handling POST request for validating the user input and saving Student in database.
+	 * Handling POST request for validating the user input and saving Provider in database.
 	 */
 	@RequestMapping(value = { "/new" }, method = RequestMethod.POST)
-	public String saveStudent(@Valid Student student, BindingResult result,
+	public String saveProvider(@Valid Provider provider, BindingResult result,
 			ModelMap model) {
 
 		if (result.hasErrors()) {
 			return "registration";
 		}
 		
-		if(!service.isStudentCodeUnique(student.getId(), student.getCode())){
-			FieldError codeError =new FieldError("Student","code",messageSource.getMessage("non.unique.code", new String[]{student.getCode()}, Locale.getDefault()));
+		if(!service.isProviderCodeUnique(provider.getId(), provider.getCode())){
+			FieldError codeError =new FieldError("Provider","code",messageSource.getMessage("non.unique.code", new String[]{provider.getCode()}, Locale.getDefault()));
 		    result.addError(codeError);
 			return "registration";
 		}
 		
-		service.saveStudent(student);
+		service.saveProvider(provider);
 
-		model.addAttribute("success", "Student " + student.getName() + " registered successfully");
+		model.addAttribute("success", "Provider " + provider.getName() + " registered successfully.");
 		return "success";
 	}
 
 
 	/*
-	 * Provide the existing Student for updating.
+	 * Provide the existing Provider for updating.
 	 */
-	@RequestMapping(value = { "/edit-{code}-student" }, method = RequestMethod.GET)
-	public String editStudent(@PathVariable String code, ModelMap model) {
-		Student student = service.findStudentByCode(code);
-		model.addAttribute("student", student);
+	@RequestMapping(value = { "/edit-{code}-provider" }, method = RequestMethod.GET)
+	public String editProvider(@PathVariable String code, ModelMap model) {
+		Provider provider = service.findProviderByCode(code);
+		model.addAttribute("provider", provider);
 		model.addAttribute("edit", true);
 		return "registration";
 	}
 	
 	/*
-	 * Handling POST request for validating the user input and updating Student in database.
+	 * Handling POST request for validating the user input and updating Provider in database.
 	 */
-	@RequestMapping(value = { "/edit-{code}-student" }, method = RequestMethod.POST)
-	public String updateStudent(@Valid Student student, BindingResult result,
+	@RequestMapping(value = { "/edit-{code}-provider" }, method = RequestMethod.POST)
+	public String updateProvider(@Valid Provider provider, BindingResult result,
 			ModelMap model, @PathVariable String code) {
 
 		if (result.hasErrors()) {
 			return "registration";
 		}
 
-		if(!service.isStudentCodeUnique(student.getId(), student.getCode())){
-			FieldError codeError =new FieldError("Student","code",messageSource.getMessage("non.unique.code", new String[]{student.getCode()}, Locale.getDefault()));
+		if(!service.isProviderCodeUnique(provider.getId(), provider.getCode())){
+			FieldError codeError =new FieldError("Provider","code",messageSource.getMessage("non.unique.code", new String[]{provider.getCode()}, Locale.getDefault()));
 		    result.addError(codeError);
 			return "registration";
 		}
 
-		service.updateStudent(student);
+		service.updateProvider(provider);
 
-		model.addAttribute("success", "Student " + student.getName()	+ " updated successfully");
+		model.addAttribute("success", "Provider " + provider.getName()	+ " updated successfully");
 		return "success";
 	}
 
 	
 	/*
-	 * Delete an Student by it's CODE value.
+	 * Delete an Provider by it's CODE value.
 	 */
-	@RequestMapping(value = { "/delete-{code}-student" }, method = RequestMethod.GET)
-	public String deleteStudent(@PathVariable String code) {
-		service.deleteStudentByCode(code);
+	@RequestMapping(value = { "/delete-{code}-provider" }, method = RequestMethod.GET)
+	public String deleteProvider(@PathVariable String code) {
+		service.deleteProviderByCode(code);
 		return "redirect:/list";
 	}
 
