@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "pricings")
+@Table(name = "pricing")
 @Data
 public class ProductPricing {
 

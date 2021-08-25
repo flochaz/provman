@@ -160,7 +160,8 @@ public class MyController {
 		modelMap.addAttribute("products", products);
 		modelMap.addAttribute("farmId", farmId);
 
-		return "products";
+
+		return "productList";
 	}
 
 	@RequestMapping(value = {"/product/edit/{productId}"}, method = RequestMethod.GET)
@@ -170,7 +171,8 @@ public class MyController {
 		modelMap.addAttribute("product", product);
 		modelMap.addAttribute("edit", true);
 
-		return "pricings";
+
+		return "pricingList";
 	}
 
 	@RequestMapping(value = {"/product/edit/{productId}/{pricingId}"}, method = RequestMethod.POST)
@@ -226,7 +228,8 @@ public class MyController {
 
 		modelMap.addAttribute("pricings", pricings);
 
-		return "pricings";
+
+		return "pricingList";
 	}
 
 	@RequestMapping(value = {"/pricing/edit/{id}"}, method = RequestMethod.GET)

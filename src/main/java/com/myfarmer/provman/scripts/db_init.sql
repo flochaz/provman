@@ -1,11 +1,11 @@
-create table products (
+create table product (
                           id integer primary key auto_increment not null,
                           name varchar(30) not null,
                           farm_id integer not null,
                           description varchar(50)
 );
 
-create table pricings (
+create table pricing (
                           id integer primary key auto_increment not null,
                           weight float not null,
                           price float not null,
