@@ -22,12 +22,12 @@ public class ProductPricing {
   private int id;
 
   @NotNull
-  @Column(name = "weight", nullable = false)
-  private float weight;
-
-  @NotNull
   @Column(name = "price", nullable = false)
   private float price;
+
+  @NotNull
+  @Column(name = "weight", nullable = false)
+  private float weight;
 
   @ManyToOne
   @JoinColumn(name = "product_id")
