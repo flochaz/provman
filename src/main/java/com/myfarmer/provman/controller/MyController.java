@@ -45,7 +45,6 @@ public class MyController {
 	 */
 	@RequestMapping(value = { "/", "/provider/list" }, method = RequestMethod.GET)
 	public String listProviders(ModelMap model) {
-
 		List<Provider> providers = providerService.findAllProviders();
 		model.addAttribute("providers", providers);
 		return "allproviders";
@@ -125,9 +124,11 @@ public class MyController {
 	 * Delete a Provider by it's CODE value.
 	 */
 	@RequestMapping(value = { "/delete-{code}-provider" }, method = RequestMethod.GET)
-	public String deleteProvider(@PathVariable String code) {
+	public String deleteProvider(@PathVariable String code, ModelMap model) {
 		providerService.deleteProviderByCode(code);
-		return "redirect:/list";
+		List<Provider> providers = providerService.findAllProviders();
+		model.addAttribute("providers", providers);
+		return "allproviders";
 	}
 
 	/*
