@@ -4,6 +4,11 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<script src=https://code.jquery.com/jquery-3.6.0.min.js></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+	    rel="stylesheet"
+	    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	    crossorigin="anonymous">
 	<title>List of Providers</title>
 
 	<style>
@@ -17,22 +22,28 @@
 
 
 <body>
-	<h2>List of Providers</h2>	
-	<table>
-		<tr>
-			<td>NAME</td><td>Entering Date</td><td>Nationality</td><td>CODE</td><td></td>
-		</tr>
-		<c:forEach items="${providers}" var="provider">
+	
+	<div class="container">
+		<h2>List of Providers</h2><br/>	
+		<table class="table table-striped">
 			<tr>
-			<td>${provider.name}</td>
-			<td>${provider.enteringDate}</td>
-			<td>${provider.nationality}</td>
-			<td><a href="<c:url value='/edit-${provider.code}-provider' />">${provider.code}</a></td>
-			<td><a href="<c:url value='/delete-${provider.code}-provider' />">delete</a></td>
+				<td>Name</td><td>Subscription Date</td><td>Country</td><td>CODE</td><td colspan="2"></td>
 			</tr>
-		</c:forEach>
-	</table>
-	<br/>
-	<a href="<c:url value='/new' />">Add New Provider</a>
+			<c:forEach items="${providers}" var="provider">
+				<tr>
+				<td><a class="btn btn-link" href="<c:url value='/edit-${provider.code}-provider' />">${provider.name}</a></td>
+				<td>${provider.enteringDate}</td>
+				<td>${provider.nationality}</td>
+				<td>${provider.code}</td>
+				<td><a class="btn btn-success btn-sm" href="<c:url value='/delete-${provider.code}-provider' />">Delete</a></td>
+				</tr>
+			</c:forEach>
+		</table>
+		
+		<br/>
+		
+		<a class="btn btn-primary" role="button" href="<c:url value='/provider/new' />">Add Provider</a>
+	</div>
+	
 </body>
 </html>

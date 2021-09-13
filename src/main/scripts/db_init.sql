@@ -1,3 +1,5 @@
+create database provman;
+
 create table product (
                           id integer primary key auto_increment not null,
                           name varchar(30) not null,
@@ -19,3 +21,4 @@ create table provider (
                           nationality varchar(5) not null,
                           code varchar(20) not null
 );
+
