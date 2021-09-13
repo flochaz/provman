@@ -1,5 +1,7 @@
 package com.myfarmer.provman.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,9 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import lombok.Data;
-import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.joda.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -31,7 +31,6 @@ public class Provider {
 	@NotNull
 	@DateTimeFormat(pattern="dd/MM/yyyy") 
 	@Column(name = "entering_date", nullable = false)
-	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
 	private LocalDate enteringDate;
 
 	@NotNull
