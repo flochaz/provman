@@ -13,7 +13,7 @@ limitations under the License.
 
 package com.ilmlf.product;
 
-import com.ilmlf.delivery.api.ApiStack;
+import com.ilmlf.product.api.ApiStack;
 import com.ilmlf.product.db.DbStack;
 import java.io.IOException;
 
@@ -47,7 +47,7 @@ public class ProvmanApp {
         .dbUsername("admin")
         .build());
 
-    new com.ilmlf.delivery.api.ApiStack(app, "ProvmanClusterStack", ApiStack.ApiStackProps.builder()
+    new com.ilmlf.product.api.ApiStack(app, "ProvmanClusterStack", ApiStack.ApiStackProps.builder()
         .build());
 
     app.synth();
