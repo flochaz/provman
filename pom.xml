@@ -10,10 +10,9 @@
 	<version>1.0</version>
 
 	<properties>
-		<springframework.version>4.3.0.RELEASE</springframework.version>
-		<hibernate.version>4.3.6.Final</hibernate.version>
-		<mysql.version>5.1.31</mysql.version>
-		<joda-time.version>2.3</joda-time.version>			
+		<springframework.version>5.2.16.RELEASE</springframework.version>
+		<hibernate.version>5.4.16.Final</hibernate.version>
+		<mysql.version>5.1.31</mysql.version>		
 	</properties>
 
 	<dependencies>
@@ -43,6 +42,11 @@
 			<artifactId>spring-orm</artifactId>
 			<version>${springframework.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${springframework.version}</version>
+		</dependency>
 
 		<!-- Hibernate -->
 		<dependency>
@@ -50,6 +54,11 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
+		<dependency>
+	        <groupId>org.hibernate</groupId>
+	        <artifactId>hibernate-java8</artifactId>
+	        <version>5.0.4.Final</version>
+	    </dependency>
 
 		<!-- jsr303 validation -->
 		<dependency>
@@ -87,20 +96,6 @@
 			<version>${mysql.version}</version>
 		</dependency>
 
-      	<!-- Joda-Time -->		
-		<dependency>
-  			<groupId>joda-time</groupId>
-  			<artifactId>joda-time</artifactId>
-  			<version>${joda-time.version}</version>
-  		</dependency>
-		
-		<!-- To map JodaTime with database type -->  		
-  		<dependency>
-    		<groupId>org.jadira.usertype</groupId>
-    		<artifactId>usertype.core</artifactId>
-    		<version>3.0.0.CR1</version>
-		</dependency>
-
 		<!-- Servlet+JSP+JSTL -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -126,6 +121,20 @@
 			<scope>provided</scope>
 		</dependency>
 		
+		<!-- testing -->
+		<dependency>
+	      <groupId>org.junit.jupiter</groupId>
+	      <artifactId>junit-jupiter</artifactId>
+	      <version>5.6.0</version>
+	      <scope>test</scope>
+	    </dependency>
+		<dependency>
+	      <groupId>org.mockito</groupId>
+	      <artifactId>mockito-junit-jupiter</artifactId>
+	      <version>3.7.7</version>
+	      <scope>test</scope>
+	    </dependency>
+		
 	</dependencies>
 
 
@@ -147,20 +156,6 @@
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
-			<!--  >plugin> 
-			  <groupId>org.apache.tomcat.maven</groupId> 
-			  <artifactId>tomcat7-maven-plugin</artifactId>
-			    <version>2.2</version>
-			    <configuration>
-			       <url>http://localhost:8080/provman</url>
-			       <path>/DeployMavenToTomcat</path>
-			       <!- Set update to true to avoid exist war package can not be override error ->
-			       <update>true</update>
-			       <!- Because deploy this maven project using plugin in pom so use the manager-script role user. ->
-			       <username>tomcat</username>
-			       <password>tomcat</password>
-			    </configuration>
-			 </plugin -->
 		</plugins>
 	</build>
 </project>
