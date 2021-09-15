@@ -109,7 +109,7 @@ public class DbStack extends Stack {
 
     // The `Vpc` construct creates subnets for you automatically
     // See https://docs.aws.amazon.com/cdk/api/latest/docs/aws-ec2-readme.html#vpc for details
-    this.vpc = new Vpc(this, "farmer-Vpc");
+    this.vpc = new Vpc(this, "provman-Vpc");
 
     /**
      * #################
