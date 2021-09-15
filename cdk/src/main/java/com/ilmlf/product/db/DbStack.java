@@ -56,7 +56,6 @@ public class DbStack extends Stack {
   private final String instanceEndpoint;
   private final Integer dbPort;
   private final Vpc vpc;
-  private final SecurityGroup securityGroup;
 
   /**
    * Contains database info, admin username, and password. This is a secret generated when
@@ -70,12 +69,7 @@ public class DbStack extends Stack {
    */
   private final ISecret adminSecret;
 
-  /**
-   * Secret to be used by Lambda to connect to RDS Proxy via IAM authentication.
-   * - username (hardcoded to lambda_iam)
-   * - password
-   */
-//  private final Secret userSecret;
+
 
   @lombok.Builder
   @Data
@@ -117,17 +111,6 @@ public class DbStack extends Stack {
     // See https://docs.aws.amazon.com/cdk/api/latest/docs/aws-ec2-readme.html#vpc for details
     this.vpc = new Vpc(this, "farmer-Vpc");
 
-    // Security group acts as a virtual firewall to control inbound and outbound traffic
-    this.securityGroup =
-        new SecurityGroup(
-            this,
-            "FarmerDeliverySG",
-            SecurityGroupProps.builder()
-                .vpc(vpc)
-                .description("Shared SG for database and proxy")
-                .allowAllOutbound(true)
-                .build());
-
     /**
      * #################
      * ### DB Instance #
@@ -144,7 +127,7 @@ public class DbStack extends Stack {
      *
      * See https://docs.aws.amazon.com/cdk/api/latest/docs/aws-rds-readme.html for details.
      */
-    String dbName = "FarmerDB";
+    String dbName = "ProvmanDb";
     List<ISubnet> subnets;
 
     if (props.isPublicSubnetDb) {
@@ -159,7 +142,6 @@ public class DbStack extends Stack {
             dbName,
             DatabaseInstanceProps.builder()
                 .vpc(vpc)
-                .securityGroups(List.of(securityGroup))
                 // Using MySQL engine
                 .engine(
                     DatabaseInstanceEngine.mysql(
@@ -176,32 +158,12 @@ public class DbStack extends Stack {
                 .storageType(StorageType.GP2)
                 .backupRetention(Duration.days(7))
                 .deletionProtection(false)
-                // Create an admin credential for connectin to database. This credential will
+                // Create an admin credential for connecting to database. This credential will
                 // be stored in a Secret Manager store.
                 .credentials(Credentials.fromGeneratedSecret(dbName + "admin"))
                 .databaseName(dbName)
                 .port(this.dbPort)
                 .build());
-
-    /**
-     * Creates a username/password that will be used for IAM authentication.
-     *
-     * This user will be created in the database in the ApiStack (see PopulateFarmDb.java and dbinit.sql).
-     * The user will be used by API Lambda handlers to access the database via DB Proxy (with IAM Authentication).
-     */
-//    this.userSecret = new Secret(this, "DbUserSecret",
-//        SecretProps.builder()
-//            .description("Db Username and password")
-//            .generateSecretString(
-//                SecretStringGenerator.builder()
-//                    .secretStringTemplate("{\"username\": \"" + this.dbUsername + "\"}")
-//                    .generateStringKey("password")
-//                    .passwordLength(16)
-//                    .excludePunctuation(true)
-//                    .build()
-//            )
-//            .build()
-//    );
 
     this.instanceEndpoint = farmerDb.getDbInstanceEndpointAddress() + ":" + farmerDb.getDbInstanceEndpointPort();
     this.adminSecret = farmerDb.getSecret();

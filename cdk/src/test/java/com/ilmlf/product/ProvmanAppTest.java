@@ -18,6 +18,7 @@ import static io.github.jsonSnapshot.SnapshotMatcher.expect;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.ilmlf.product.api.ApiStack;
 import com.ilmlf.product.db.DbStack;
 import io.github.jsonSnapshot.SnapshotMatcher;
 import java.io.IOException;
@@ -46,7 +47,7 @@ import software.amazon.awscdk.core.Environment;
  *
  * See https://json-snapshot.github.io/ for more details on the Snapshot library
  */
-public class DeliveryAppTest {
+public class ProvmanAppTest {
   private static final String AWS_ACCOUNT_ID =  "123456789012";
   public static final String AWS_REGION = "eu-west-1";
   private static final ObjectMapper JSON =
@@ -78,7 +79,7 @@ public class DeliveryAppTest {
 
     app = new App();
 
-    db = new DbStack(app, "DeliveryProject-Db", DbStack.DbStackProps.builder()
+    db = new DbStack(app, "Provman-Db", DbStack.DbStackProps.builder()
         .env(Environment.builder()
             .account(AWS_ACCOUNT_ID)
             .region(AWS_REGION)
@@ -91,22 +92,6 @@ public class DeliveryAppTest {
         app,
         "DeliveryProject-Api",
         ApiStack.ApiStackProps.builder()
-            .env(Environment.builder()
-                .account(AWS_ACCOUNT_ID)
-                .region(AWS_REGION)
-                .build())
-            .dbEndpoint(db.getInstanceEndpoint())
-            .dbProxyEndpoint(db.getProxyEndpoint())
-            .dbProxyArn(db.getProxyArn())
-            .dbPort(db.getDbPort())
-            .dbRegion(db.getRegion())
-            .dbUser(db.getDbUsername())
-            .dbUserSecretName(db.getUserSecret().getSecretName())
-            .dbUserSecretArn(db.getUserSecret().getSecretArn())
-            .dbAdminSecretName(db.getAdminSecret().getSecretName())
-            .dbAdminSecretArn(db.getAdminSecret().getSecretArn())
-            .dbSg(db.getSecurityGroup())
-            .dbVpc(db.getVpc())
             .build());
   }
 
