@@ -26,7 +26,7 @@ import com.myfarmer.provman.service.ProviderService;
 
 @Controller
 @RequestMapping("/")
-public class MyController {
+public class ProvmanController {
 
 	@Autowired
 	ProviderService providerService;
