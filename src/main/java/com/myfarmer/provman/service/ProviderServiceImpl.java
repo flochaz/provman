@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.myfarmer.provman.dao.ProductDao;
 import com.myfarmer.provman.dao.ProviderDao;
 import com.myfarmer.provman.model.Provider;
 
@@ -14,7 +15,12 @@ import com.myfarmer.provman.model.Provider;
 public class ProviderServiceImpl implements ProviderService {
 
 	@Autowired
-	private ProviderDao dao;
+	private ProviderDao dao;	
+	  
+	public ProviderServiceImpl(ProviderDao dao) {
+		super();
+		this.dao = dao;
+    }
 	
 	public Provider findById(int id) {
 		return dao.findById(id);
@@ -43,12 +49,12 @@ public class ProviderServiceImpl implements ProviderService {
 		return dao.findAllProviders();
 	}
 
-	public Provider findProviderByCode(String ssn) {
-		return dao.findProviderByCode(ssn);
+	public Provider findProviderByCode(String code) {
+		return dao.findProviderByCode(code);
 	}
 
-	public boolean isProviderCodeUnique(Integer id, String ssn) {
-		Provider provider = findProviderByCode(ssn);
+	public boolean isProviderCodeUnique(Integer id, String code) {
+		Provider provider = findProviderByCode(code);
 		return ( provider == null || ((id != null) && (provider.getId() == id)));
 	}
 	
