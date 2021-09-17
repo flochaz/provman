@@ -5,23 +5,22 @@ import java.util.Locale;
 
 import javax.validation.Valid;
 
-import com.myfarmer.provman.model.Product;
-import com.myfarmer.provman.model.ProductAndPrice;
-import com.myfarmer.provman.model.ProductPricing;
-import com.myfarmer.provman.service.ProductPricingService;
-import com.myfarmer.provman.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.myfarmer.provman.model.Product;
+import com.myfarmer.provman.model.ProductAndPrice;
+import com.myfarmer.provman.model.ProductPricing;
 import com.myfarmer.provman.model.Provider;
+import com.myfarmer.provman.service.ProductPricingService;
+import com.myfarmer.provman.service.ProductService;
 import com.myfarmer.provman.service.ProviderService;
 
 @Controller
