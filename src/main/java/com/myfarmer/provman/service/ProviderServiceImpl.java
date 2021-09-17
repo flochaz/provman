@@ -15,7 +15,7 @@ import com.myfarmer.provman.model.Provider;
 public class ProviderServiceImpl implements ProviderService {
 
 	@Autowired
-	private ProviderDao dao;	
+	private ProviderDao dao;
 	
 	public Provider findById(int id) {
 		return dao.findById(id);
@@ -36,8 +36,8 @@ public class ProviderServiceImpl implements ProviderService {
 		}
 	}
 
-	public void deleteProviderByCode(String ssn) {
-		dao.deleteProviderByCode(ssn);
+	public void deleteProviderByCode(String code) {
+		dao.deleteProviderByCode(code);
 	}
 	
 	public List<Provider> findAllProviders() {
