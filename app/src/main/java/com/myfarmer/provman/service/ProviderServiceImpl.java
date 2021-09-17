@@ -16,11 +16,6 @@ public class ProviderServiceImpl implements ProviderService {
 
 	@Autowired
 	private ProviderDao dao;	
-	  
-	public ProviderServiceImpl(ProviderDao dao) {
-		super();
-		this.dao = dao;
-    }
 	
 	public Provider findById(int id) {
 		return dao.findById(id);
