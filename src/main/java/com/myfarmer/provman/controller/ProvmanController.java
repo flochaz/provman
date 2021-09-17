@@ -239,7 +239,7 @@ public class ProvmanController {
 		modelMap.addAttribute("pricing", pricing);
 		modelMap.addAttribute("edit", true);
 
-		return Views.PRICINGLIST.getViewName();
+		return Views.PRICING.getViewName();
 	}
 
 	@RequestMapping(value = {"/pricing/edit/{id}"}, method = RequestMethod.POST)
