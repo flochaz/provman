@@ -346,7 +346,7 @@ class ProvmanControllerTest {
         assertTrue(modelMap.containsKey("edit"));
         assertTrue((Boolean) modelMap.get("edit"));
         
-        assertSame(Views.PRICINGLIST.getViewName(), retVal);    
+        assertSame(Views.PRICING.getViewName(), retVal);    
 	}
 	
 	@Test
