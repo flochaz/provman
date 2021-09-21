@@ -13,11 +13,14 @@ limitations under the License.
 
 package com.ilmlf.product;
 
-import com.ilmlf.product.api.ApiStack;
-import com.ilmlf.product.db.DbStack;
+import com.ilmlf.product.cicd.PipelineStack;
+import com.ilmlf.product.cicd.ProvmanStage;
 import java.io.IOException;
 
 import software.amazon.awscdk.core.App;
+import software.amazon.awscdk.core.StackProps;
+import software.amazon.awscdk.core.StageProps;
+import software.constructs.ConstructOptions;
 
 /**
  * The entry point of CDK application. This class creates a CDK App with two stacks
@@ -42,14 +45,8 @@ public class ProvmanApp {
   public static void main(final String[] args) throws IOException {
     App app = new App();
 
-    new DbStack(app, "ProvmanDbStack", DbStack.DbStackProps.builder()
-        .dbPort(3306)
-        .dbUsername("admin")
-        .build());
 
-    new com.ilmlf.product.api.ApiStack(app, "ProvmanClusterStack", ApiStack.ApiStackProps.builder()
-        .build());
-
+    new PipelineStack(app, "Pipeline", StackProps.builder().build());
     app.synth();
   }
 }
