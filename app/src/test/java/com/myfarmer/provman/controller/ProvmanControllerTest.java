@@ -85,11 +85,11 @@ class ProvmanControllerTest {
 	
 	@Test
 	void testSaveProvider() {
-		Provider provider = new Provider();
+		Provider provider = new Provider(1,"name",LocalDate.now(),"nationality","code");
 		ModelMap modelMap = new ModelMap();		
 		BindingResult result = Mockito.mock(BindingResult.class);
 	    Mockito.when(result.hasErrors()).thenReturn(false);
-	    Mockito.when(providerService.isProviderCodeUnique(Mockito.any(), Mockito.any()))
+	    Mockito.when(providerService.isProviderCodeUnique(Mockito.anyInt(), Mockito.anyString()))
 				.thenReturn(true);       
 	    
 	    String retVal = controller.saveProvider(provider, result, modelMap);
@@ -111,7 +111,7 @@ class ProvmanControllerTest {
 		Provider provider = new Provider(1,"name",LocalDate.now(),"nationality","code");
 		BindingResult result = Mockito.mock(BindingResult.class);
 	    Mockito.when(result.hasErrors()).thenReturn(false);
-	    Mockito.when(providerService.isProviderCodeUnique(Mockito.any(), Mockito.any()))
+	    Mockito.when(providerService.isProviderCodeUnique(Mockito.anyInt(), Mockito.anyString()))
 				.thenReturn(false);       
 	    
 	    String retVal = controller.saveProvider(provider, result, modelMap);
@@ -122,7 +122,7 @@ class ProvmanControllerTest {
 	public void testEditProvider() {
 		ModelMap modelMap = new ModelMap();
 		Provider provider = new Provider();
-		Mockito.when(providerService.findProviderByCode(Mockito.any()))
+		Mockito.when(providerService.findProviderByCode(Mockito.anyString()))
 				.thenReturn(provider);    
 		
 		String retVal = controller.editProvider("a", modelMap);
@@ -142,7 +142,7 @@ class ProvmanControllerTest {
 		
 		BindingResult result = Mockito.mock(BindingResult.class);
 	    Mockito.when(result.hasErrors()).thenReturn(false);
-	    Mockito.when(providerService.isProviderCodeUnique(Mockito.any(), Mockito.any()))
+	    Mockito.when(providerService.isProviderCodeUnique(Mockito.anyInt(), Mockito.anyString()))
 				.thenReturn(true);       
 	    
 	    String retVal = controller.updateProvider(provider, result, modelMap, "a");
@@ -160,13 +160,14 @@ class ProvmanControllerTest {
 	
 	@Test
 	void testUpdateProviderNonUniqueProvider() {
-		ModelMap modelMap = new ModelMap();		
+		ModelMap modelMap = new ModelMap();
+		Provider provider = new Provider(1,"name",LocalDate.now(),"nationality","code");
 		BindingResult result = Mockito.mock(BindingResult.class);
 	    Mockito.when(result.hasErrors()).thenReturn(false);
-	    Mockito.when(providerService.isProviderCodeUnique(Mockito.any(), Mockito.any()))
+	    Mockito.when(providerService.isProviderCodeUnique(Mockito.anyInt(), Mockito.anyString()))
 				.thenReturn(false);       
 	    
-	    String retVal = controller.updateProvider(new Provider(), result, modelMap, "a");
+	    String retVal = controller.updateProvider(provider, result, modelMap, "a");
 	    assertSame(Views.REGISTRATION.getViewName(), retVal);    	
 	}
 	
@@ -219,7 +220,7 @@ class ProvmanControllerTest {
 	void testGetProducts() {
 		ModelMap modelMap = new ModelMap();
 		Product product = helperCreateProduct();
-		Mockito.when(productService.getProductsByFarmId(Mockito.any()))
+		Mockito.when(productService.getProductsByFarmId(Mockito.anyInt()))
 				.thenReturn(new ArrayList<Product>(List.of(product)));
 		
 	
@@ -239,7 +240,7 @@ class ProvmanControllerTest {
 	void testEditProduct() {
 		ModelMap modelMap = new ModelMap();
 		Product product = helperCreateProduct();
-		Mockito.when(productService.findById(Mockito.any()))
+		Mockito.when(productService.findById(Mockito.anyInt()))
 				.thenReturn(product);
 
 		String retVal = controller.editProduct(product.getId(), modelMap);
@@ -289,7 +290,7 @@ class ProvmanControllerTest {
 	void testNewPricing() {
 		Product product = new Product();
 		ModelMap modelMap = new ModelMap();
-		Mockito.when(productService.findById(Mockito.any())).thenReturn(product);
+		Mockito.when(productService.findById(Mockito.anyInt())).thenReturn(product);
 	
 		String retVal = controller.newPricing(1, modelMap);
 		assertTrue(modelMap.containsKey("product"));
@@ -319,7 +320,7 @@ class ProvmanControllerTest {
 	void testGetPricings() {
 		ModelMap modelMap = new ModelMap();
 		List<ProductPricing> pricings = new ArrayList<ProductPricing>(List.of(new ProductPricing()));
-		Mockito.when(pricingService.findProductPricingsByProductId(Mockito.any()))
+		Mockito.when(pricingService.findProductPricingsByProductId(Mockito.anyInt()))
 				.thenReturn(pricings);
 		
 		String retVal = controller.getPricings(1, modelMap);
@@ -336,7 +337,7 @@ class ProvmanControllerTest {
 	void testEditPricing() {
 		ModelMap modelMap = new ModelMap();
 		ProductPricing pricing = new ProductPricing();
-		Mockito.when(pricingService.findById(Mockito.any()))
+		Mockito.when(pricingService.findById(Mockito.anyInt()))
 				.thenReturn(pricing);
 		
 		String retVal = controller.editPricing(1, modelMap);

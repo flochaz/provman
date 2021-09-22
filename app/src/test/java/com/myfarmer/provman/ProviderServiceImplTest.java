@@ -88,7 +88,7 @@ class ProviderServiceImplTest {
 	@Test
 	void testFindProviderByCode() {
         Provider provider = new Provider(1,"name",LocalDate.now(),"nationality","code");
-        Mockito.doReturn(provider).when(dao).findProviderByCode(Mockito.any());
+        Mockito.doReturn(provider).when(dao).findProviderByCode(Mockito.anyString());
 
         // Execute the service call
         Provider returnedProvider = service.findProviderByCode("a");
@@ -110,7 +110,7 @@ class ProviderServiceImplTest {
 	@Test
 	void testIsProviderCodeUniqueSameExists() {
 		Provider provider = new Provider(1,"name-a", LocalDate.now(), "nationality-a", "code-a");
-		Mockito.when(dao.findProviderByCode(Mockito.any())).thenReturn(provider);
+		Mockito.when(dao.findProviderByCode(Mockito.anyString())).thenReturn(provider);
 	
 		boolean retVal = service.isProviderCodeUnique(1, "a");
 		assertTrue(retVal);
@@ -125,7 +125,7 @@ class ProviderServiceImplTest {
 	@Test
 	void testIsProviderCodeUniqueOtherExists() {
 		Provider provider = new Provider(1,"name-a", LocalDate.now(), "nationality-a", "code-a");
-		Mockito.when(dao.findProviderByCode(Mockito.any())).thenReturn(provider);
+		Mockito.when(dao.findProviderByCode(Mockito.anyString())).thenReturn(provider);
 	
 		boolean retVal = service.isProviderCodeUnique(2, "a");
 		assertFalse(retVal);
