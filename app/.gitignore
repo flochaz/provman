@@ -1,5 +1,5 @@
 target/
-app/src/main/resources/jdbc.properties
+src/main/resources/jdbc.properties
 bin/
 .factorypath
 .settings/*
