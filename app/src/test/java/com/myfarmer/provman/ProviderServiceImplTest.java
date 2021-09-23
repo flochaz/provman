@@ -4,14 +4,18 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.myfarmer.provman.dao.ProviderDao;
 import com.myfarmer.provman.model.Provider;
 import com.myfarmer.provman.service.ProviderServiceImpl;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.HibernateException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -67,21 +71,6 @@ class ProviderServiceImplTest {
 
 		// Assert the response
 		assertTrue(returnedProvider == null, "Bad Provider returned");
-	}
-
-	@Test
-	void testUpdateProvider() {
-		LocalDate now = LocalDate.now();
-		Provider provider = new Provider(1, "name-a", now, "nationality-a", "code-a");
-		Mockito.doReturn(provider).when(dao).findById(1);
-
-		Provider providerUpdated = new Provider(1, "name-b", now, "nationality-b", "code-b");
-		// Execute the service call
-		service.updateProvider(providerUpdated);
-
-		// check that the original provider now has vars matching the updated provider
-		assertTrue(provider.equals(providerUpdated), "The Provider returned was not the same as the mock");
-
 	}
 
 	@Test
