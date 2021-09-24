@@ -5,28 +5,27 @@ import java.util.Locale;
 
 import javax.validation.Valid;
 
-import com.myfarmer.provman.model.Product;
-import com.myfarmer.provman.model.ProductAndPrice;
-import com.myfarmer.provman.model.ProductPricing;
-import com.myfarmer.provman.service.ProductPricingService;
-import com.myfarmer.provman.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.myfarmer.provman.model.Product;
+import com.myfarmer.provman.model.ProductAndPrice;
+import com.myfarmer.provman.model.ProductPricing;
 import com.myfarmer.provman.model.Provider;
+import com.myfarmer.provman.service.ProductPricingService;
+import com.myfarmer.provman.service.ProductService;
 import com.myfarmer.provman.service.ProviderService;
 
 @Controller
 @RequestMapping("/")
-public class MyController {
+public class ProvmanController {
 
 	@Autowired
 	ProviderService providerService;
@@ -47,7 +46,7 @@ public class MyController {
 	public String listProviders(ModelMap model) {
 		List<Provider> providers = providerService.findAllProviders();
 		model.addAttribute("providers", providers);
-		return "allproviders";
+		return Views.ALLPROVIDERS.getViewName();
 	}
 
 	/*
@@ -58,7 +57,7 @@ public class MyController {
 		Provider provider = new Provider();
 		model.addAttribute("provider", provider);
 		model.addAttribute("edit", false);
-		return "registration";
+		return Views.REGISTRATION.getViewName();
 	}
 
 	/*
@@ -69,19 +68,19 @@ public class MyController {
 			ModelMap model) {
 
 		if (result.hasErrors()) {
-			return "registration";
+			return Views.REGISTRATION.getViewName();
 		}
 		
 		if(!providerService.isProviderCodeUnique(provider.getId(), provider.getCode())){
 			FieldError codeError =new FieldError("Provider","code",messageSource.getMessage("non.unique.code", new String[]{provider.getCode()}, Locale.getDefault()));
 		    result.addError(codeError);
-			return "registration";
+			return Views.REGISTRATION.getViewName();
 		}
 		
 		providerService.saveProvider(provider);
 
 		model.addAttribute("success", "Provider " + provider.getName() + " registered successfully.");
-		return "success";
+		return Views.SUCCESS.getViewName();
 	}
 
 
@@ -93,7 +92,7 @@ public class MyController {
 		Provider provider = providerService.findProviderByCode(code);
 		model.addAttribute("provider", provider);
 		model.addAttribute("edit", true);
-		return "registration";
+		return Views.REGISTRATION.getViewName();
 	}
 	
 	/*
@@ -104,19 +103,19 @@ public class MyController {
 			ModelMap model, @PathVariable String code) {
 
 		if (result.hasErrors()) {
-			return "registration";
+			return Views.REGISTRATION.getViewName();
 		}
 
 		if(!providerService.isProviderCodeUnique(provider.getId(), provider.getCode())){
 			FieldError codeError =new FieldError("Provider","code",messageSource.getMessage("non.unique.code", new String[]{provider.getCode()}, Locale.getDefault()));
 		    result.addError(codeError);
-			return "registration";
+			return Views.REGISTRATION.getViewName();
 		}
 
 		providerService.updateProvider(provider);
 
 		model.addAttribute("success", "Provider " + provider.getName()	+ " updated successfully");
-		return "success";
+		return Views.SUCCESS.getViewName();
 	}
 
 	
@@ -128,7 +127,7 @@ public class MyController {
 		providerService.deleteProviderByCode(code);
 		List<Provider> providers = providerService.findAllProviders();
 		model.addAttribute("providers", providers);
-		return "allproviders";
+		return Views.ALLPROVIDERS.getViewName();
 	}
 
 	/*
@@ -141,18 +140,18 @@ public class MyController {
 		modelMap.addAttribute("product", product);
 		modelMap.addAttribute("edit", false);
 
-		return "product";
+		return Views.PRODUCT.getViewName();
 	}
 
 	@RequestMapping(value = {"/product/new/{farmId}"}, method = RequestMethod.POST)
 	public String saveProduct(@Valid Product product, ModelMap modelMap) {
 		productService.saveProduct(product);
 
-		modelMap.addAttribute("returnPage", "product");
+		modelMap.addAttribute("returnPage", Views.PRODUCT.getViewName());
 		modelMap.addAttribute("farmId", product.getFarmId());
 		modelMap.addAttribute("success", "Product " + product.getName() + " saved successfully");
 
-		return "success";
+		return Views.SUCCESS.getViewName();
 	}
 
 	@RequestMapping(value = {"/product/{farmId}"}, method = RequestMethod.GET)
@@ -162,7 +161,7 @@ public class MyController {
 		modelMap.addAttribute("farmId", farmId);
 
 
-		return "productList";
+		return Views.PRODUCTLIST.getViewName();
 	}
 
 	@RequestMapping(value = {"/product/edit/{productId}"}, method = RequestMethod.GET)
@@ -173,7 +172,7 @@ public class MyController {
 		modelMap.addAttribute("edit", true);
 
 
-		return "pricingList";
+		return Views.PRICINGLIST.getViewName();
 	}
 
 	@RequestMapping(value = {"/product/edit/{productId}/{pricingId}"}, method = RequestMethod.POST)
@@ -181,23 +180,23 @@ public class MyController {
 		productService.updateProduct(productAndPrice.getProduct());
 		pricingService.updateProductPricing(productAndPrice.getPricing());
 
-		modelMap.addAttribute("returnPage", "product");
+		modelMap.addAttribute("returnPage", Views.PRODUCT.getViewName());
 		modelMap.addAttribute("farmId", productAndPrice.getProduct().getFarmId());
 		modelMap.addAttribute("success", "Successfully updated product " +
 				productAndPrice.getProduct().getName());
 
-		return "success";
+		return Views.SUCCESS.getViewName();
 	}
 
 	@RequestMapping(value = {"/product/delete/{farmId}/{id}"}, method = RequestMethod.GET)
 	public String deleteProduct(@PathVariable("farmId") Integer farmId, @PathVariable("id") Integer id, ModelMap modelMap) {
 		productService.deleteProductById(id);
 
-		modelMap.addAttribute("returnPage", "product");
+		modelMap.addAttribute("returnPage", Views.PRODUCT.getViewName());
 		modelMap.addAttribute("farmId", farmId);
 		modelMap.addAttribute("success", "Successfully deleted product " + id.toString());
 
-		return "success";
+		return Views.SUCCESS.getViewName();
 	}
 
 	@RequestMapping(value = {"/pricing/new/{prodId}"}, method = RequestMethod.GET)
@@ -209,18 +208,18 @@ public class MyController {
 		modelMap.addAttribute("pricing", productPricing);
 
 
-		return "pricing";
+		return Views.PRICING.getViewName();
 	}
 
 	@RequestMapping(value = {"/pricing/new/{prodId}"}, method = RequestMethod.POST)
 	public String savePricing(@Valid ProductPricing productPricing, ModelMap modelMap) {
 		pricingService.saveProductPricing(productPricing);
 
-		modelMap.addAttribute("returnPage", "pricing");
+		modelMap.addAttribute("returnPage", Views.PRICING.getViewName());
 		modelMap.addAttribute("prodId", productPricing.getProduct().getId());
 		modelMap.addAttribute("success", "Product pricing saved successfully");
 
-		return "success";
+		return Views.SUCCESS.getViewName();
 	}
 
 	@RequestMapping(value = {"/pricing/{prodId}"}, method = RequestMethod.GET)
@@ -230,7 +229,7 @@ public class MyController {
 		modelMap.addAttribute("pricings", pricings);
 
 
-		return "pricingList";
+		return Views.PRICINGLIST.getViewName();
 	}
 
 	@RequestMapping(value = {"/pricing/edit/{id}"}, method = RequestMethod.GET)
@@ -240,7 +239,7 @@ public class MyController {
 		modelMap.addAttribute("pricing", pricing);
 		modelMap.addAttribute("edit", true);
 
-		return "pricing";
+		return Views.PRICING.getViewName();
 	}
 
 	@RequestMapping(value = {"/pricing/edit/{id}"}, method = RequestMethod.POST)
@@ -248,22 +247,22 @@ public class MyController {
 		Integer prodId = pricing.getProduct().getId();
 		pricingService.updateProductPricing(pricing);
 
-		modelMap.addAttribute("returnPage", "pricing");
+		modelMap.addAttribute("returnPage", Views.PRICING.getViewName());
 		modelMap.addAttribute("prodId", prodId);
 		modelMap.addAttribute("success", "Successfully updated pricing " + pricing.getId());
 
-		return "success";
+		return Views.SUCCESS.getViewName();
 	}
 
 	@RequestMapping(value = "/pricing/delete/{prodId}/{id}", method = RequestMethod.GET)
 	public String deletePricing(@PathVariable("prodId") Integer prodId, @PathVariable("id") Integer id, ModelMap modelMap) {
 		pricingService.deleteProductPricingById(id);
 
-		modelMap.addAttribute("returnPage", "pricing");
+		modelMap.addAttribute("returnPage", Views.PRICING.getViewName());
 		modelMap.addAttribute("prodId", prodId);
 		modelMap.addAttribute("success", "Successfully deleted pricing " + id.toString());
 
-		return "success";
+		return Views.SUCCESS.getViewName();
 	}
 
 }

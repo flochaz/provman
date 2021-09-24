@@ -12,10 +12,10 @@ public interface ProviderDao {
 	
 	public void saveOrUpdate(Provider provider);
 	
-	void deleteProviderByCode(String ssn);
+	void deleteProviderByCode(String code);
 	
 	List<Provider> findAllProviders();
 
-	Provider findProviderByCode(String ssn);
+	Provider findProviderByCode(String code);
 
 }

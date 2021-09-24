@@ -1,6 +1,7 @@
 package com.myfarmer.provman.model;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,5 +32,6 @@ public class ProductPricing {
 
   @ManyToOne
   @JoinColumn(name = "product_id")
+  @ToString.Exclude	// prevent stackoverflow from circular dependency
   private Product product;
 }
