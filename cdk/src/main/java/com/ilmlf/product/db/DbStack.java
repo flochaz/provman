@@ -69,8 +69,6 @@ public class DbStack extends Stack {
    */
   private final ISecret adminSecret;
 
-
-
   @lombok.Builder
   @Data
   public static class DbStackProps implements StackProps {

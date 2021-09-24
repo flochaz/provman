@@ -1,0 +1,15 @@
+{
+  "CICD_ENV": {
+    "region": "eu-west-1",
+    "account": "433621526002"
+  },
+  "QA_ENV": {
+    "region": "eu-west-1",
+    "account": "433621526002"
+  },
+  "availability-zones:account=433621526002:region=eu-west-1": [
+    "eu-west-1a",
+    "eu-west-1b",
+    "eu-west-1c"
+  ]
+}

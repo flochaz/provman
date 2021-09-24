@@ -7,10 +7,16 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Gradle: software.amazon.awscdk:apigateway:1.121.0" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.20/lombok-1.18.20.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="library" name="Gradle: software.amazon.awscdk:core:1.121.0" level="project" />
-    <orderEntry type="library" name="Gradle: software.constructs:constructs:3.3.149" level="project" />
-    <orderEntry type="library" name="Gradle: software.amazon.awscdk:cdk-cx-api:1.121.0" level="project" />
     <orderEntry type="library" name="Gradle: software.amazon.awscdk:cdk-pipelines:1.121.0" level="project" />
   </component>
 </module>
