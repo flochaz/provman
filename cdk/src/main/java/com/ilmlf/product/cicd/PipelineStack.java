@@ -13,14 +13,24 @@ limitations under the License.
 
 package com.ilmlf.product.cicd;
 
+import lombok.Data;
 import software.amazon.awscdk.core.*;
 import software.amazon.awscdk.pipelines.*;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Set;
 
 public class PipelineStack extends Stack {
-    public PipelineStack(Construct scope, String id, StackProps options) throws IOException {
+
+    @lombok.Builder
+    @Data
+    public static class PipelineStackProps implements StackProps {
+        private Set<Environment> StageEnvironments;
+        private Environment env;
+    }
+
+    public PipelineStack(Construct scope, String id, PipelineStackProps options) throws IOException {
         super(scope, id, options);
         CodePipeline pipeline = CodePipeline.Builder.create(this, "Pipeline")
                 .crossAccountKeys(true)
@@ -35,11 +45,13 @@ public class PipelineStack extends Stack {
                                                 SecretValue.secretsManager("GITHUB_TOKEN")).build()
                                         )
                                 )
-                                .commands(Arrays.asList("cd cdk", "npx cdk synth"))
+                                .commands(Arrays.asList("npm install -g aws-cdk", "cd cdk", "npx cdk synth"))
                                 .primaryOutputDirectory("cdk/cdk.out")
                                 .build())
                 .build();
 
-        pipeline.addStage(new ProvmanStage(this, "test", StageProps.builder().build()));
+        for (Environment stageEnvironment : options.getStageEnvironments()) {
+            pipeline.addStage(new ProvmanStage(this, "test", StageProps.builder().env(stageEnvironment).build()));
+        }
     }
 }

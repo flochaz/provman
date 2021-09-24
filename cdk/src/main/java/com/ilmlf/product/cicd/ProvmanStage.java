@@ -13,6 +13,7 @@ limitations under the License.
 
 package com.ilmlf.product.cicd;
 
+import software.amazon.awscdk.core.Construct;
 import software.amazon.awscdk.core.StageProps;
 import software.amazon.awscdk.core.Stage;
 import com.ilmlf.product.api.ApiStack;
@@ -22,7 +23,7 @@ import java.io.IOException;
 
 public class ProvmanStage extends Stage {
 
-    public ProvmanStage(software.constructs.Construct scope,
+    public ProvmanStage(Construct scope,
                         java.lang.String id,
                         StageProps props) throws IOException {
         super(scope, id, props);

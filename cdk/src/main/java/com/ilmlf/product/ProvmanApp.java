@@ -14,13 +14,12 @@ limitations under the License.
 package com.ilmlf.product;
 
 import com.ilmlf.product.cicd.PipelineStack;
-import com.ilmlf.product.cicd.ProvmanStage;
+
 import java.io.IOException;
+import java.util.*;
 
 import software.amazon.awscdk.core.App;
-import software.amazon.awscdk.core.StackProps;
-import software.amazon.awscdk.core.StageProps;
-import software.constructs.ConstructOptions;
+import software.amazon.awscdk.core.Environment;
 
 /**
  * The entry point of CDK application. This class creates a CDK App with two stacks
@@ -39,14 +38,34 @@ public class ProvmanApp {
   /**
    * Entry point of the CDK CLI.
    *
-   * @param args Not used
+   * @param envParamsFromContext Map from context
    * @throws IOException can be thrown from ApiStack as it read and build Lambda package
    */
+
+  // Helper method to build an environment
+  static Environment makeEnv(Map<String,String> envParamsFromContext) {
+    return Environment.builder()
+            .account(envParamsFromContext.get("account"))
+            .region(envParamsFromContext.get("region"))
+            .build();
+  }
+
   public static void main(final String[] args) throws IOException {
     App app = new App();
 
 
-    new PipelineStack(app, "Pipeline", StackProps.builder().build());
+
+
+    Set<Environment> deployableEnvs = new HashSet<>();
+    Map<String,String> cicdEnvFromContext = (Map<String,String>) app.getNode().tryGetContext("CICD_ENV");
+    Map<String,String> qaEnvFromContext = (Map<String,String>) app.getNode().tryGetContext("QA_ENV");
+
+
+    Environment qa = makeEnv(qaEnvFromContext);
+    Environment cicd = makeEnv(cicdEnvFromContext);
+
+    deployableEnvs.add(qa);
+    new PipelineStack(app, "Pipeline", PipelineStack.PipelineStackProps.builder().env(cicd).StageEnvironments(deployableEnvs).build());
     app.synth();
   }
 }
