@@ -14,8 +14,16 @@ limitations under the License.
 package com.ilmlf.product.cicd;
 
 import lombok.Data;
-import software.amazon.awscdk.core.*;
-import software.amazon.awscdk.pipelines.*;
+import software.amazon.awscdk.core.Construct;
+import software.amazon.awscdk.core.Environment;
+import software.amazon.awscdk.core.SecretValue;
+import software.amazon.awscdk.core.Stack;
+import software.amazon.awscdk.core.StackProps;
+import software.amazon.awscdk.core.StageProps;
+import software.amazon.awscdk.pipelines.CodePipeline;
+import software.amazon.awscdk.pipelines.CodePipelineSource;
+import software.amazon.awscdk.pipelines.GitHubSourceOptions;
+import software.amazon.awscdk.pipelines.ShellStep;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -26,7 +34,7 @@ public class PipelineStack extends Stack {
     @lombok.Builder
     @Data
     public static class PipelineStackProps implements StackProps {
-        private Set<Environment> StageEnvironments;
+        private Set<Environment> stageEnvironments;
         private Environment env;
     }
 
@@ -40,17 +48,17 @@ public class PipelineStack extends Stack {
                         ShellStep.Builder.create("Synth")
                                 .input(CodePipelineSource.gitHub(
                                         "flochaz/provman",
-                                        "main",
+                                        "flochaz/cicd",
                                         GitHubSourceOptions.builder().authentication(
-                                                SecretValue.secretsManager("GITHUB_TOKEN")).build()
+                                                SecretValue.secretsManager("GITHUB_TOKEN_2")).build()
                                         )
                                 )
-                                .commands(Arrays.asList("npm install -g aws-cdk", "cd cdk", "npx cdk synth"))
+                                .commands(Arrays.asList("npm install -g aws-cdk", "cd cdk", "npx cdk synth -vv"))
                                 .primaryOutputDirectory("cdk/cdk.out")
                                 .build())
                 .build();
 
-        for (Environment stageEnvironment : options.getStageEnvironments()) {
+        for (Environment stageEnvironment : options.stageEnvironments) {
             pipeline.addStage(new ProvmanStage(this, "test", StageProps.builder().env(stageEnvironment).build()));
         }
     }
