@@ -50,7 +50,7 @@ public class PipelineStack extends Stack {
                                         "flochaz/provman",
                                         "flochaz/cicd",
                                         GitHubSourceOptions.builder().authentication(
-                                                SecretValue.secretsManager("GITHUB_TOKEN")).build()
+                                                SecretValue.secretsManager("GITHUB_TOKEN_2")).build()
                                         )
                                 )
                                 .commands(Arrays.asList("npm install -g aws-cdk", "cd cdk", "npx cdk synth"))
