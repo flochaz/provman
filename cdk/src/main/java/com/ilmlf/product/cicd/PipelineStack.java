@@ -53,7 +53,7 @@ public class PipelineStack extends Stack {
                                                 SecretValue.secretsManager("GITHUB_TOKEN_2")).build()
                                         )
                                 )
-                                .commands(Arrays.asList("npm install -g aws-cdk", "cd cdk", "npx cdk synth"))
+                                .commands(Arrays.asList("npm install -g aws-cdk", "cd cdk", "npx cdk synth -vv"))
                                 .primaryOutputDirectory("cdk/cdk.out")
                                 .build())
                 .build();
