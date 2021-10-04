@@ -14,17 +14,18 @@ limitations under the License.
 package com.ilmlf.product;
 
 import com.ilmlf.product.cicd.PipelineStack;
-
 import java.io.IOException;
-import java.util.*;
-
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import software.amazon.awscdk.core.Annotations;
 import software.amazon.awscdk.core.App;
+import software.amazon.awscdk.core.Construct;
 import software.amazon.awscdk.core.Environment;
 
 /**
- * The entry point of CDK application. This class creates a CDK App with two stacks
- * 1. DbStack contains network resources (e.g. VPC, subnets), MySQL DB, DB Proxy, and secrets
- * 2. ApiStack contains API Gateway and Lambda functions for compute
+ * The entry point of CDK application.
+ * This 
  *
  * <p>
  * We separate the two stacks from each other as they have different life cycles. The ApiStack will
@@ -32,40 +33,49 @@ import software.amazon.awscdk.core.Environment;
  * put different permission settings for each stack (e.g. prevent an innocent intern deleting
  * your DB accidentally).
  * </p>
+ *
  */
 public class ProvmanApp {
 
   /**
-   * Entry point of the CDK CLI.
-   *
-   * @param envParamsFromContext Map from context
-   * @throws IOException can be thrown from ApiStack as it read and build Lambda package
+   * Helper method to build an environment.
+   * @param scope like app, construct etc.
+   * @param contextKey referencing the env json object with region and account attributes.
+   * @throws IOException can be thrown from ApiStack as it read and build Lambda package.
    */
+  static Environment makeEnv(Construct scope, String contextKey) {
 
-  // Helper method to build an environment
-  static Environment makeEnv(Map<String,String> envParamsFromContext) {
-    return Environment.builder()
-            .account(envParamsFromContext.get("account"))
-            .region(envParamsFromContext.get("region"))
-            .build();
+    Map<String, String> envParamsFromContext = (Map<String,String>) scope.getNode().tryGetContext(contextKey);
+    if(envParamsFromContext != null) {
+      return Environment.builder()
+              .account(envParamsFromContext.get("account"))
+              .region(envParamsFromContext.get("region"))
+              .build();
+    } else {
+      Annotations.of(scope).addWarning(String.format("No environment params found in context for env {}, using default", contextKey));
+      return Environment.builder()
+              .account(System.getenv("CDK_DEFAULT_ACCOUNT"))
+              .region(System.getenv("CDK_DEFAULT_REGION"))
+              .build();
+    }
+
   }
 
+  /**
+   * Entry point of the CDK CLI.
+   * @param args
+   * @throws IOException
+   */
   public static void main(final String[] args) throws IOException {
     App app = new App();
 
+    Set<Environment> deployableEnvironments = new HashSet<>();
 
+    Environment cicd = makeEnv(app, "CICD_ENV");
+    Environment qa = makeEnv(app, "QA_ENV");
 
-
-    Set<Environment> deployableEnvs = new HashSet<>();
-    Map<String,String> cicdEnvFromContext = (Map<String,String>) app.getNode().tryGetContext("CICD_ENV");
-    Map<String,String> qaEnvFromContext = (Map<String,String>) app.getNode().tryGetContext("QA_ENV");
-
-
-    Environment qa = makeEnv(qaEnvFromContext);
-    Environment cicd = makeEnv(cicdEnvFromContext);
-
-    deployableEnvs.add(qa);
-    new PipelineStack(app, "Pipeline", PipelineStack.PipelineStackProps.builder().env(cicd).StageEnvironments(deployableEnvs).build());
+    deployableEnvironments.add(qa);
+    new PipelineStack(app, "Pipeline", PipelineStack.PipelineStackProps.builder().env(cicd).stageEnvironments(deployableEnvironments).build());
     app.synth();
   }
 }

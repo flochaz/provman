@@ -21,6 +21,11 @@ import com.ilmlf.product.db.DbStack;
 
 import java.io.IOException;
 
+/**
+ * The stage for the application. This class creates a CDK Stage with two stacks
+ * 1. DbStack contains network resources (e.g. VPC, subnets), MySQL DB, DB Proxy, and secrets
+ * 2. ApiStack contains API Gateway and Lambda functions for compute
+ */
 public class ProvmanStage extends Stage {
 
     public ProvmanStage(Construct scope,
