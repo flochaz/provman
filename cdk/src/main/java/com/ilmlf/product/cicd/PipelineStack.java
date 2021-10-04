@@ -48,7 +48,7 @@ public class PipelineStack extends Stack {
                         ShellStep.Builder.create("Synth")
                                 .input(CodePipelineSource.gitHub(
                                         "flochaz/provman",
-                                        "main",
+                                        "flochaz/cicd",
                                         GitHubSourceOptions.builder().authentication(
                                                 SecretValue.secretsManager("GITHUB_TOKEN")).build()
                                         )
