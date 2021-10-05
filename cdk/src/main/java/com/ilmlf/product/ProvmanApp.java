@@ -64,9 +64,9 @@ public class ProvmanApp {
   /**
    * Entry point of the CDK CLI.
    * @param args
-   * @throws IOException
+   * @throws Exception
    */
-  public static void main(final String[] args) throws IOException {
+  public static void main(final String[] args) throws Exception {
     App app = new App();
 
     Set<Environment> deployableEnvironments = new HashSet<>();

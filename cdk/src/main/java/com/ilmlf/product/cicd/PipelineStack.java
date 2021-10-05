@@ -38,7 +38,7 @@ public class PipelineStack extends Stack {
         private Environment env;
     }
 
-    public PipelineStack(Construct scope, String id, PipelineStackProps options) throws IOException {
+    public PipelineStack(Construct scope, String id, PipelineStackProps options) throws Exception {
         super(scope, id, options);
         CodePipeline pipeline = CodePipeline.Builder.create(this, "Pipeline")
                 .crossAccountKeys(true)

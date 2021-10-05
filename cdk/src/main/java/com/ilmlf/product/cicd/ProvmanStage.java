@@ -30,7 +30,7 @@ public class ProvmanStage extends Stage {
 
     public ProvmanStage(Construct scope,
                         java.lang.String id,
-                        StageProps props) throws IOException {
+                        StageProps props) throws Exception {
         super(scope, id, props);
         new DbStack(this, "ProvmanDbStack",DbStack.DbStackProps.builder()
                 .dbPort(3306)
