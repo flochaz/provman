@@ -102,7 +102,7 @@ public class ApiStack extends Stack {
   }
 
   public DockerImageAsset createContainerImage() {
-    // this.buildWar("../cdk/src/main/container/");
+    this.buildWar("../cdk/src/main/container/");
 
     DockerImageAsset imageAsset = new DockerImageAsset(this, "ProvmanImage", DockerImageAssetProps.builder()
         .directory("./src/main/container")
