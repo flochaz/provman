@@ -22,6 +22,8 @@ import software.amazon.awscdk.cloudformation.include.CfnIncludeProps;
 import software.amazon.awscdk.core.Construct;
 import software.amazon.awscdk.core.Stack;
 import software.amazon.awscdk.core.StackProps;
+import software.amazon.awscdk.services.ecr.assets.DockerImageAsset;
+import software.amazon.awscdk.services.ecr.assets.DockerImageAssetProps;
 
 public class ApiStack extends Stack {
   private static final Map<String, String> nestedStackTemplates = Map.of(
@@ -35,6 +37,8 @@ public class ApiStack extends Stack {
       "Route53Stack", "./src/main/resources/ecs-route53.yml"
   );
 
+  private static final String CONTAINER_NAME = "ProvmanEcsContainer";
+
   @lombok.Builder
   @Data
   public static class ApiStackProps implements StackProps {
@@ -44,8 +48,13 @@ public class ApiStack extends Stack {
       throws IOException {
     super(scope, id, props);
 
+    DockerImageAsset imageAsset = this.createContainerImage();
+
     CfnInclude provmanEcs = new CfnInclude(this, "ProvmanCluster", CfnIncludeProps.builder()
         .templateFile("./src/main/resources/ecs-master.json")
+        .parameters(Map.of(
+            "ContainerImage", imageAsset.getImageUri(),
+            "SingleDestName", CONTAINER_NAME))
         .build());
 
     for (Map.Entry<String, String> entry : nestedStackTemplates.entrySet()) {
@@ -54,6 +63,52 @@ public class ApiStack extends Stack {
           .build());
     }
 
+  }
+
+  /**
+   * Try to bundle the package locally. CDK can use this method to build locally (which is faster).
+   * If the build doesn't work, it will build within a Docker image which should work regardless of
+   * local environment.
+   *
+   * Note that CDK expects this function to return either true or false based on bundling result.
+   *
+   * @param outputPath
+   * @return whether the bundling script was successfully executed
+   */
+  private Boolean buildWar(String outputPath) {
+    try {
+      ProcessBuilder pb =
+          new ProcessBuilder(
+              "bash",
+              "-c",
+              "cd ../app && mvn package && cp target/provman.war "
+                  + outputPath);
+
+      Process p = pb.start(); // Start the process.
+      p.waitFor(); // Wait for the process to finish.
+
+      if (p.exitValue() == 0) {
+        System.out.println("Script executed successfully");
+        return true;
+      } else {
+        System.out.println("Script executed failed");
+        return false;
+      }
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
+  public DockerImageAsset createContainerImage() {
+    this.buildWar("../cdk/src/main/container/");
+
+    DockerImageAsset imageAsset = new DockerImageAsset(this, "ProvmanImage", DockerImageAssetProps.builder()
+        .directory("./src/main/container")
+        .build());
+
+    return imageAsset;
   }
 }
 

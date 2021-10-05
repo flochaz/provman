@@ -13,7 +13,7 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "com.myfarmer.provman")
-public class MyWebConfig {
+public class WebConfig {
 	
 	@Bean
 	public ViewResolver viewResolver() {

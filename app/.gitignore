@@ -1,2 +1,7 @@
-/target/
+target/
 src/main/resources/jdbc.properties
+bin/
+.factorypath
+.settings/*
+.project
+.classpath

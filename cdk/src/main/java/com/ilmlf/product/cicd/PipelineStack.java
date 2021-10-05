@@ -62,4 +62,8 @@ public class PipelineStack extends Stack {
             pipeline.addStage(new ProvmanStage(this, "test", StageProps.builder().env(stageEnvironment).build()));
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> backup
